@@ -1,8 +1,7 @@
 from dotenv import load_dotenv
 import os
 import pandas as pd
-import faiss
-from langchain_community.vectorstores import FAISS
+from langchain.vectorstores import Chroma
 from langchain_community.document_loaders import DataFrameLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -32,7 +31,7 @@ text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=10
 chunks = text_splitter.split_documents(docs)
 
 embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-exp-03-07", google_api_key=GEMINI_API_KEY)
-vectorstore = FAISS.from_documents(chunks, embeddings)
+vectorstore = Chroma.from_documents(chunks, embeddings)
 
 retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
 
